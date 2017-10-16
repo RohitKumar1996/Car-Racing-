@@ -18,7 +18,7 @@ car_width = 73
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 
-pygame.display.set_caption('Car Racing')
+pygame.display.set_caption('Car Wars')
 clock = pygame.time.Clock()
 
 crashed = False
@@ -55,11 +55,15 @@ def message_display(text):
 def crash():
     message_display('CRASHED')
 
-def button(msg,x,y,w,h,ic,ac):
+def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
-
+    click = pygame.mouse.get_pressed()
+    
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(gameDisplay, ac,(x,y,w,h))
+
+        if click[0] == 1 and action != None:
+           action()
     else:
         pygame.draw.rect(gameDisplay, ic,(x,y,w,h))
 
@@ -81,15 +85,19 @@ def game_intro():
                 
         gameDisplay.blit(bgmenu, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf',115)
-        TextSurf, TextRect = text_objects("CAR RACING", largeText)
+        TextSurf, TextRect = text_objects("CAR WARS", largeText)
         TextRect.center = ((display_width/2),(display_height/3))
         gameDisplay.blit(TextSurf, TextRect)
 
-        button("START",150,300,120,50,green,b_green)
-        button("QUIT",550,300,120,50,red,b_red)
+        button("START",150,300,120,50,green,b_green,gameloop)
+        button("QUIT",550,300,120,50,red,b_red,quitgame)
         
         pygame.display.update()
         clock.tick(15)
+
+def quitgame():
+    pygame.quit()
+    quit()
 
 def gameloop():
     x =  (display_width * 0.45)
